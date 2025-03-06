@@ -4,7 +4,7 @@ class Autorename < Formula
   url "https://github.com/lilyharuna/autorename/archive/refs/tags/v1.0.0.tar.gz"
   sha256 "7a5415509a068041d71dc742ba8266e357de4d1cd52c46599097a2da9085f521"
   version "1.0.0"
-  license "MIT"
+  license "BSD"
 
   def install
     bin.install "bin/autorename"
