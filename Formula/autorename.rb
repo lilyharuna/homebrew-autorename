@@ -2,7 +2,7 @@ class Autorename < Formula
   desc "Auto rename files in a watched directory based on given options"
   homepage "https://github.com/lilyharuna/autorename"
   url "https://github.com/lilyharuna/autorename/archive/refs/tags/v1.0.0.tar.gz"
-  sha256 "7a5415509a068041d71dc742ba8266e357de4d1cd52c46599097a2da9085f521"
+  sha256 "02d6dbe50e7f29a4f416419d4f57fc2c09e588909c1afb8bbe6c6dc74205a017"
   version "1.0.0"
   license "BSD"
 
