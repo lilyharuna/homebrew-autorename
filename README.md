@@ -1,3 +1,4 @@
+<a name="Top"/>
 # autorename
 Monitor the path and automatically rename the new file with counter.
 
@@ -11,6 +12,7 @@ Monitor the path and automatically rename the new file with counter.
 ------
 <a name="English"/>
 # English Guide
+[Go to top of the page.](#Top)
 ## Install autorename
 Step 1: Add official tap
 ```zsh
@@ -115,8 +117,9 @@ img-p003.png
 - To monitor multiple file types, use `-t` multiple times (`-t png -t jpg`).  
 - If -e (end counter) is lower than -s (start counter), the -e counter will be ignored and the command will not be automatically terminated. To stop the command, enter `Ctrl + C`(`^C`) to force the command to exit.
 -----
-<a name="English"/>
+<a name="Japanese"/>
 # 日本語解説
+[ページの最上部に移動](#Top)
 ## autorenameのインストール方法
 Step 1: Tapを追加
 ```zsh
