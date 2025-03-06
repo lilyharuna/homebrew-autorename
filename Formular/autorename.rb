@@ -1,9 +1,10 @@
 class Autorename < Formula
   desc "Auto rename files in a watched directory based on given options"
   homepage "https://github.com/lilyharuna/autorename"
-  url "https://github.com/lilyharuna/autorename/archive/v1.0.0.tar.gz"
-  sha256 "PLACEHOLDER_SHA256"  # 上で計算した sha256 に置き換える
+  url "https://github.com/lilyharuna/autorename/archive/refs/tags/v1.0.0.tar.gz"
+  sha256 "7a5415509a068041d71dc742ba8266e357de4d1cd52c46599097a2da9085f521"
   version "1.0.0"
+  license "MIT"
 
   def install
     bin.install "bin/autorename"
