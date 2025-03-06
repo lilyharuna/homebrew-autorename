@@ -5,10 +5,11 @@ Monitor the path and automatically rename the new file with counter.
 特定のディレクトリを監視し、そのパスにファイルが追加されることを検知した後、自動的にカウンター付きのファイル名に名前を変更するためのコマンドです。
 
 ## 目次 Index
-- [English Guide](#-English-Guide)
-- [日本語解説](#-日本語解説)
+- [English Guide](#English)
+- [日本語解説](#Japanese)
 
 ------
+<a name="English"/>
 # English Guide
 ## Install autorename
 Step 1: Add official tap
@@ -114,6 +115,7 @@ img-p003.png
 - To monitor multiple file types, use `-t` multiple times (`-t png -t jpg`).  
 - If -e (end counter) is lower than -s (start counter), the -e counter will be ignored and the command will not be automatically terminated. To stop the command, enter `Ctrl + C`(`^C`) to force the command to exit.
 -----
+<a name="English"/>
 # 日本語解説
 ## autorenameのインストール方法
 Step 1: Tapを追加
