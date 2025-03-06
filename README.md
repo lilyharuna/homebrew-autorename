@@ -1,18 +1,20 @@
-<a name="Top"/>
+<a name="top"/>
+
 # autorename
 Monitor the path and automatically rename the new file with counter.
-
 
 特定のディレクトリを監視し、そのパスにファイルが追加されることを検知した後、自動的にカウンター付きのファイル名に名前を変更するためのコマンドです。
 
 ## 目次 Index
-- [English Guide](#English)
-- [日本語解説](#Japanese)
+- [English Guide](#english)
+- [日本語解説](#japanese)
 
 ------
-<a name="English"/>
+<a name="english"/>
+
 # English Guide
-[Go to top of the page.](#Top)
+[Go to top of the page.](#top)
+
 ## Install autorename
 Step 1: Add official tap
 ```zsh
@@ -117,9 +119,11 @@ img-p003.png
 - To monitor multiple file types, use `-t` multiple times (`-t png -t jpg`).  
 - If -e (end counter) is lower than -s (start counter), the -e counter will be ignored and the command will not be automatically terminated. To stop the command, enter `Ctrl + C`(`^C`) to force the command to exit.
 -----
-<a name="Japanese"/>
+<a name="japanese"/>
+
 # 日本語解説
-[ページの最上部に移動](#Top)
+[ページの最上部に移動](#top)
+
 ## autorenameのインストール方法
 Step 1: Tapを追加
 ```zsh
