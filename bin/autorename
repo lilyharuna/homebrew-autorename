@@ -1,0 +1,185 @@
+#!/bin/zsh
+
+# 色設定
+RED="\e[31m"
+LIGHTRED="\e[1;31m"
+GREEN="\e[32m"
+YELLOW="\e[33m"
+BLUE="\e[34m"
+BOLD="\e[1m"
+RESET="\e[m"
+BG_GRAY="\e[48;5;236m"
+BG_BLUE="\e[44m"
+
+# デフォルト値
+PREFIX="img"
+EXTENSIONS=()  # 複数の拡張子を格納する配列
+WATCH_DIR=""
+COUNTER_DIGITS=2   # カウンターの桁数（デフォルトは2桁）
+START_COUNT=1      # デフォルトの開始カウンター
+END_COUNT=-1       # 終了カウンター（デフォルト: 無制限）
+SHOW_HELP=0        # -h/--help が指定されたかどうかのフラグ
+
+# オプション解析
+while [[ $# -gt 0 ]]; do
+    case "$1" in
+        -p|--prefix)
+            PREFIX="$2"
+            shift 2
+            ;;
+        -t|--type)
+            EXTENSIONS+=("$2")  # 配列に拡張子を追加
+            shift 2
+            ;;
+        -c|--counter)
+            if [[ "$2" =~ ^[1-9][0-9]*$ ]]; then  # 数値チェック（1以上の整数）
+                COUNTER_DIGITS="$2"
+            else
+                echo "Invalid counter digits: $2. Using default ($COUNTER_DIGITS)."
+            fi
+            shift 2
+            ;;
+        -s|--start)
+            if [[ "$2" =~ ^[1-9][0-9]*$ ]]; then
+                START_COUNT="$2"
+            else
+                echo "Invalid start counter: $2. Using default ($START_COUNT)."
+            fi
+            shift 2
+            ;;
+        -e|--end)
+            if [[ "$2" =~ ^[1-9][0-9]*$ ]]; then
+                END_COUNT="$2"
+            else
+                echo "Invalid end counter: $2. Ignoring."
+            fi
+            shift 2
+            ;;
+        -h|--help)
+            SHOW_HELP=1
+            shift
+            ;;
+        *)
+            if [[ -z "$WATCH_DIR" ]]; then
+                WATCH_DIR="$1"
+                shift
+            else
+                echo "Unknown argument: $1"
+                exit 1
+            fi
+            ;;
+    esac
+done
+
+# `-h` / `--help` が指定された場合は詳細ヘルプを表示
+if [[ "$SHOW_HELP" -eq 1 ]]; then
+    echo -e "${BLUE}${BOLD}Usage:${RESET}"
+    echo -e "  autorename <directory_to_watch> ${YELLOW}[-p prefix] [-t extension] [-c digits] [-s start] [-e end]${RESET}\n"
+
+    echo -e "${BLUE}${BOLD}Options:${RESET}"
+    echo -e "${BG_BLUE} -p ${RESET} ${YELLOW}(--prefix)${RESET}   Specify the prefix for renamed files. Default: 'img'"
+    echo -e "${BG_BLUE} -t ${RESET} ${YELLOW}(--type)${RESET}     Target file extension(s) for auto renaming."
+    echo -e "                 To specify multiple types, use: ${BG_GRAY}${LIGHTRED}[-t png -t jpg]${RESET}"
+    echo -e "${BG_BLUE} -c ${RESET} ${YELLOW}(--counter)${RESET}   Set the number of digits for numbering. Default: 2"
+    echo -e "${BG_BLUE} -s ${RESET} ${YELLOW}(--start)${RESET}     Set the starting counter value. Default: 1"
+    echo -e "${BG_BLUE} -e ${RESET} ${YELLOW}(--end)${RESET}       Stop the script when the counter reaches this value."
+
+    echo -e "\n${YELLOW}If -e is not specified, use ${BOLD}Ctrl + C${RESET}${YELLOW} to stop the script manually.${RESET}"
+    echo -e "\n${LIGHTRED}Command made by Lyna YUZUHA${RESET}"
+    exit 0
+fi
+
+# 必須引数の確認（ディレクトリが指定されていない場合）
+if [[ -z "$WATCH_DIR" ]]; then
+    echo -e "${RED}${BOLD}Error: No directory specified.${RESET}\n"
+    echo -e "${BLUE}${BOLD}Usage:${RESET}"
+    echo -e "  autorename <directory_to_watch> ${YELLOW}[-p prefix] [-t extension] [-c digits] [-s start] [-e end]${RESET}\n"
+    echo -e "  ${YELLOW}For more details, use:${RESET} ${BLUE}${BOLD}-h${RESET} ${YELLOW}or${RESET} ${BLUE}${BOLD}--help${RESET}\n"
+    exit 1
+fi
+
+# `-e` の値が `-s` より小さい場合、警告を出して `-e` を無視
+if [[ "$END_COUNT" -ne -1 && "$END_COUNT" -lt "$START_COUNT" ]]; then
+    echo "Warning: End counter ($END_COUNT) is smaller than start counter ($START_COUNT).\nIgnoring end counter."
+    END_COUNT=-1
+fi
+
+# 必須引数の確認
+if [[ -z "$WATCH_DIR" ]]; then
+    echo "Error: No directory specified."
+    exit 1
+fi
+
+# 拡張子が指定されていなければデフォルトを "png" にする
+if [[ ${#EXTENSIONS[@]} -eq 0 ]]; then
+    EXTENSIONS=("png")
+fi
+
+echo "Watching directory: $WATCH_DIR for new files of types: ${EXTENSIONS[@]}"
+echo "Using prefix: $PREFIX"
+echo "Counter digits: $COUNTER_DIGITS"
+echo "Start counter: $START_COUNT"
+if [[ "$END_COUNT" -ne -1 ]]; then
+    echo "End counter: $END_COUNT (Script will stop automatically at this count)"
+else
+    echo "No end counter specified. Use Ctrl + C to stop manually."
+fi
+
+# 連番カウンターの初期値
+COUNTER="$START_COUNT"
+
+# `fswatch` のフィルタ用に拡張子を正規表現で結合
+EXT_REGEX=""
+for ext in "${EXTENSIONS[@]}"; do
+    EXT_REGEX+="-i \\.$ext$ "
+done
+
+fswatch -0 $EXT_REGEX "$WATCH_DIR" | while IFS= read -r -d "" file; do
+    BASENAME=$(basename "$file")
+    DIRNAME=$(dirname "$file")
+    EXT="${BASENAME##*.}"  # 拡張子を取得
+
+    # 🔹 **拡張子が指定された `EXTENSIONS` に含まれているかチェック**
+    found_ext=0
+    for ext in "${EXTENSIONS[@]}"; do
+        if [[ "$EXT" == "$ext" ]]; then
+            found_ext=1
+            break
+        fi
+    done
+
+    if [[ "$found_ext" -eq 0 ]]; then
+        continue
+    fi
+
+    # 既にリネームされたファイルをスキップ (prefix-pXX.拡張子 の形式)
+    if [[ "$BASENAME" =~ ^${PREFIX}-p[0-9]+\.${EXT}$ ]]; then
+        continue
+    fi
+
+    # ファイルの存在を確認
+    if [[ ! -e "$file" ]]; then
+        continue
+    fi
+
+    # 連番のフォーマット (01, 02, ..., 99, 100, ...) の桁数を動的に変更
+    while [[ -e "$DIRNAME/${PREFIX}-p$(printf "%0${COUNTER_DIGITS}d" $COUNTER).$EXT" ]]; do
+        ((COUNTER++))
+    done
+    NEW_NAME="${PREFIX}-p$(printf "%0${COUNTER_DIGITS}d" $COUNTER).$EXT"
+    NEW_PATH="$DIRNAME/$NEW_NAME"
+
+    # リネーム実行
+    if mv "$file" "$NEW_PATH"; then
+        echo "Renamed: $file → $NEW_NAME"
+        ((COUNTER++))  # 実際に成功した場合のみカウンターを増やす
+    else
+        echo "Failed to rename: $file"
+    fi
+
+    # `-e` の値に達したら終了
+    if [[ "$END_COUNT" -ne -1 && "$COUNTER" -gt "$END_COUNT" ]]; then
+        echo "End counter ($END_COUNT) reached. Exiting..."
+        exit 0
+    fi
+done
