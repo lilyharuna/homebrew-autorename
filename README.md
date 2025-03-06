@@ -1,5 +1,7 @@
 # autorename
 Monitor the path and automatically rename the new file with counter.
+
+
 特定のディレクトリを監視し、そのパスにファイルが追加されることを検知した後、自動的にカウンター付きのファイル名に名前を変更するためのコマンドです。
 
 ## 目次 Index
