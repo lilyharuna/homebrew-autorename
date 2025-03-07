@@ -40,7 +40,7 @@ while [[ $# -gt 0 ]]; do
             shift 2
             ;;
         -s|--start)
-            if [[ "$2" =~ ^[1-9][0-9]*$ ]]; then
+            if [[ "$2" =~ ^[0-9]+$ ]]; then  # 数値チェック（開始カウンターは0以上の整数）
                 START_COUNT="$2"
             else
                 echo "Invalid start counter: $2. Using default ($START_COUNT)."
@@ -139,7 +139,7 @@ fswatch -0 $EXT_REGEX "$WATCH_DIR" | while IFS= read -r -d "" file; do
     DIRNAME=$(dirname "$file")
     EXT="${BASENAME##*.}"  # 拡張子を取得
 
-    # 🔹 **拡張子が指定された `EXTENSIONS` に含まれているかチェック**
+    # 拡張子が指定された `EXTENSIONS` に含まれているかチェック
     found_ext=0
     for ext in "${EXTENSIONS[@]}"; do
         if [[ "$EXT" == "$ext" ]]; then
