@@ -48,6 +48,21 @@ Step 2: delete the official tap
 brew untap lilyharuna/autorename
 ```
 ------
+## The reason you have to use this command
+| ![](docs/withoutcommand.gif) | ![](docs/withcommand.gif) |
+|:---:|:---:|
+| Without this command | With this command |
+| ![](docs/withoutcommand.png) | ![](docs/withcommand.png) |
+| Without this command. File name and order are randomized. | With this command. File name is patterned and displayed in order. |
+
+Many internet services automatically rename images into random strings, including Twitter, Bluesky, Note, and many others.
+This command allows you to maintain the download order by assigning sequential counters when saving images from these services.
+
+Although initially designed for image files, this system is also compatible with video files and many other file types. It can handle environments where multiple file formats, such as WebP and PNG, are mixed, ensuring that all files are renamed in sequential order.
+
+Since this command relies only on standard system packages, it can be used seamlessly in most environments.
+
+------
 ## Usage
 autorename monitors the specified directory and automatically renames newly added files based on a counter.
 
@@ -156,6 +171,19 @@ Step 2: Tapを削除
 ```zsh
 brew untap lilyharuna/autorename
 ```
+------
+## このコマンドを使うべき理由
+| ![](docs/withoutcommand.gif) | ![](docs/withcommand.gif) |
+|:---:|:---:|
+| コマンド未使用 | コマンドを使ったら |
+| ![](docs/withoutcommand.png) | ![](docs/withcommand.png) |
+| ファイル名がランダムで、順番もぐちゃぐちゃ | ファイル名がパターン化され、保存順番に表示される |
+
+多くのインターネットサービスは、画像を勝手にランダムな文字列に変換してしまいます。TwitterやBluesky、Noteやその他多数…
+このコマンドは、それらのサービスから画像を保存する際、カウンターに従ってダウンロードの順番がわかるように指定できます。
+画像ファイルを対象に作られたコマンドですが、このシステムは画像だけでなく、動画ファイルやその他の多くのファイルにも対応可能で、さらにwebpやpngなどの多くのファイルフォーマットが混在している環境でもそのすべてのファイルを連番でまとめることができます。
+こちらのコマンドはごく一般的なパッケージのみを使用しているため、多くの環境で問題なく使用できます。
+
 ------
 ## 使い方
 autorenameは、指定したディレクトリに新しく追加されたファイルを監視し、そのファイルが指定された拡張子の場合、カウンターに従ってファイルの名前を更新します。
