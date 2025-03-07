@@ -88,9 +88,9 @@ autorename ~/Downloads -t png
 ```
 
 **Example Output:**  
-img-p01.png  
-img-p02.png  
-img-p03.png  
+img01.png  
+img02.png  
+img03.png  
 ...
 
 ### **2. Use a custom prefix (`photo_`) and start from 10:**
@@ -99,9 +99,9 @@ autorename ~/Pictures -t jpg -p photo_ -s 10
 ```
 
 **Example Output:**  
-photo_-p10.jpg  
-photo_-p11.jpg  
-photo_-p12.jpg  
+photo_10.jpg  
+photo_11.jpg  
+photo_12.jpg  
 ...
 
 **3. Monitor multiple file types (`.png` and `.jpg`), stop at 20:**
@@ -110,11 +110,11 @@ autorename ~/Images -t png -t jpg -e 20
 ```
 
 **Example Output:**  
-img-p01.png  
-img-p02.jpg  
-img-p03.png  
+img01.png  
+img02.jpg  
+img03.png  
 ...  
-(img-p20.jpg reached, script exits)
+(img20.jpg reached, script exits)
 
 **4. Use 3-digit numbering format (`001`, `002`, etc.):**
 ```zsh
@@ -122,9 +122,9 @@ autorename ~/Downloads -t png -c 3
 ```
 
 **Example Output:**  
-img-p001.png  
-img-p002.png  
-img-p003.png  
+img001.png  
+img002.png  
+img003.png  
 ...
 
 ---
@@ -214,9 +214,9 @@ autorename ~/Downloads
 ```
 
 **この場合の出力:**  
-img-p01.png  
-img-p02.png  
-img-p03.png  
+img01.png  
+img02.png  
+img03.png  
 ...
 
 ### **2. プリフィックスをカスタマイズし、さらにカウンターを10から開始させる方法:**
@@ -226,9 +226,9 @@ autorename ~/Pictures -t jpg -p photo -s 10
 ここでは、`~/Pictures`フォルダーを監視し、プリフィックスとしてphotoを使用、さらにjpgの拡張子を対象に、カウンター10から開始しています。
 
 **この場合の出力:**  
-photo-p10.jpg  
-photo-p11.jpg  
-photo-p12.jpg  
+photo10.jpg  
+photo11.jpg  
+photo12.jpg  
 ...
 
 **3. 複数のファイル拡張子を監視し、さらにカウンターが20に達した時自動的にコマンドを停止:**
@@ -238,12 +238,12 @@ autorename ~/Images -t png -t jpg -e 20
 ここでは、`~/Images`フォルダーを監視し、pngおよびjpg拡張子を対象に、カウンターが20に達成したらコマンドが自動的に停止するようになっています。
 
 **この場合の出力:**  
-img-p01.png  
-img-p02.jpg  
-img-p03.png  
+img01.png  
+img02.jpg  
+img03.png  
 ...  
-img-p19.png
-img-p20.jpg
+img19.png
+img20.jpg
 *(コマンドが自動的に終了され、zshシェルに戻される)*
 
 **4. 3桁の数字を使ってカウンターを出力(例: `001`, `002`, ...):**
@@ -252,9 +252,9 @@ autorename ~/Downloads -t png -c 3
 ```
 
 **この場合の出力:**  
-img-p001.png  
-img-p002.png  
-img-p003.png  
+img001.png  
+img002.png  
+img003.png  
 ...
 
 ---
