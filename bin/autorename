@@ -152,8 +152,8 @@ fswatch -0 $EXT_REGEX "$WATCH_DIR" | while IFS= read -r -d "" file; do
         continue
     fi
 
-    # 既にリネームされたファイルをスキップ (prefix-pXX.拡張子 の形式)
-    if [[ "$BASENAME" =~ ^${PREFIX}-p[0-9]+\.${EXT}$ ]]; then
+    # 既にリネームされたファイルをスキップ (prefixXX.拡張子 の形式)
+    if [[ "$BASENAME" =~ ^${PREFIX}[0-9]+\.${EXT}$ ]]; then
         continue
     fi
 
@@ -163,10 +163,10 @@ fswatch -0 $EXT_REGEX "$WATCH_DIR" | while IFS= read -r -d "" file; do
     fi
 
     # 連番のフォーマット (01, 02, ..., 99, 100, ...) の桁数を動的に変更
-    while [[ -e "$DIRNAME/${PREFIX}-p$(printf "%0${COUNTER_DIGITS}d" $COUNTER).$EXT" ]]; do
+    while [[ -e "$DIRNAME/${PREFIX}$(printf "%0${COUNTER_DIGITS}d" $COUNTER).$EXT" ]]; do
         ((COUNTER++))
     done
-    NEW_NAME="${PREFIX}-p$(printf "%0${COUNTER_DIGITS}d" $COUNTER).$EXT"
+    NEW_NAME="${PREFIX}$(printf "%0${COUNTER_DIGITS}d" $COUNTER).$EXT"
     NEW_PATH="$DIRNAME/$NEW_NAME"
 
     # リネーム実行
