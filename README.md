@@ -104,7 +104,7 @@ photo_11.jpg
 photo_12.jpg  
 ...
 
-**3. Monitor multiple file types (`.png` and `.jpg`), stop at 20:**
+### **3. Monitor multiple file types (`.png` and `.jpg`), stop at 20:**
 ```zsh
 autorename ~/Images -t png -t jpg -e 20
 ```
@@ -116,7 +116,7 @@ img03.png
 ...  
 (img20.jpg reached, script exits)
 
-**4. Use 3-digit numbering format (`001`, `002`, etc.):**
+### **4. Use 3-digit numbering format (`001`, `002`, etc.):**
 ```zsh
 autorename ~/Downloads -t png -c 3
 ```
@@ -231,7 +231,7 @@ photo11.jpg
 photo12.jpg  
 ...
 
-**3. 複数のファイル拡張子を監視し、さらにカウンターが20に達した時自動的にコマンドを停止:**
+### **3. 複数のファイル拡張子を監視し、さらにカウンターが20に達した時自動的にコマンドを停止:**
 ```zsh
 autorename ~/Images -t png -t jpg -e 20
 ```
@@ -246,7 +246,7 @@ img19.png
 img20.jpg
 *(コマンドが自動的に終了され、zshシェルに戻される)*
 
-**4. 3桁の数字を使ってカウンターを出力(例: `001`, `002`, ...):**
+### **4. 3桁の数字を使ってカウンターを出力(例: `001`, `002`, ...):**
 ```zsh
 autorename ~/Downloads -t png -c 3
 ```
