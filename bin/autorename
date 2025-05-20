@@ -80,6 +80,8 @@ if [[ "$SHOW_HELP" -eq 1 ]]; then
     echo -e "${BG_BLUE} -p ${RESET} ${YELLOW}(--prefix)${RESET}   Specify the prefix for renamed files. Default: 'img'"
     echo -e "${BG_BLUE} -t ${RESET} ${YELLOW}(--type)${RESET}     Target file extension(s) for auto renaming."
     echo -e "                 To specify multiple types, use: ${BG_GRAY}${LIGHTRED}[-t png -t jpg]${RESET}"
+    echo -e "                 ${YELLOW}If not specified, all file formats will be targeted"
+    echo -e "                 except for files starting with a dot (e.g., .DS_Store).${RESET}"
     echo -e "${BG_BLUE} -c ${RESET} ${YELLOW}(--counter)${RESET}   Set the number of digits for numbering. Default: 2"
     echo -e "${BG_BLUE} -s ${RESET} ${YELLOW}(--start)${RESET}     Set the starting counter value. Default: 1"
     echo -e "${BG_BLUE} -e ${RESET} ${YELLOW}(--end)${RESET}       Stop the script when the counter reaches this value."
@@ -110,12 +112,12 @@ if [[ -z "$WATCH_DIR" ]]; then
     exit 1
 fi
 
-# 拡張子が指定されていなければデフォルトを "png" にする
+# -t 未指定の場合のメッセージ
 if [[ ${#EXTENSIONS[@]} -eq 0 ]]; then
-    EXTENSIONS=("png")
+    echo -e "${YELLOW}No -t/--type specified. All file formats will be targeted except files starting with a dot (e.g., .DS_Store).${RESET}"
 fi
 
-echo "Watching directory: $WATCH_DIR for new files of types: ${EXTENSIONS[@]}"
+echo "Watching directory: $WATCH_DIR for new files of types: ${EXTENSIONS[@]:-ALL FILES (except dotfiles)}"
 echo "Using prefix: $PREFIX"
 echo "Counter digits: $COUNTER_DIGITS"
 echo "Start counter: $START_COUNT"
@@ -128,28 +130,38 @@ fi
 # 連番カウンターの初期値
 COUNTER="$START_COUNT"
 
-# `fswatch` のフィルタ用に拡張子を正規表現で結合
-EXT_REGEX=""
-for ext in "${EXTENSIONS[@]}"; do
-    EXT_REGEX+="-i \\.$ext$ "
-done
-
-fswatch -0 $EXT_REGEX "$WATCH_DIR" | while IFS= read -r -d "" file; do
-    BASENAME=$(basename "$file")
-    DIRNAME=$(dirname "$file")
-    EXT="${BASENAME##*.}"  # 拡張子を取得
-
-    # 拡張子が指定された `EXTENSIONS` に含まれているかチェック
-    found_ext=0
+# fswatch コマンドの引数設定
+FSWATCH_ARGS=()
+if [[ ${#EXTENSIONS[@]} -ne 0 ]]; then
+    EXT_REGEX=""
     for ext in "${EXTENSIONS[@]}"; do
-        if [[ "$EXT" == "$ext" ]]; then
-            found_ext=1
-            break
-        fi
+        EXT_REGEX+="-i \\.$ext$ "
     done
+    FSWATCH_ARGS=("${(z)EXT_REGEX}")
+fi
 
-    if [[ "$found_ext" -eq 0 ]]; then
+fswatch -0 $FSWATCH_ARGS "$WATCH_DIR" | while IFS= read -r -d "" file; do
+    BASENAME=$(basename "$file")
+    # .で始まるファイルは対象外
+    if [[ "$BASENAME" == .* ]]; then
         continue
+    fi
+
+    DIRNAME=$(dirname "$file")
+    EXT="${BASENAME##*.}"
+
+    # 拡張子が指定された場合のみ拡張子チェック
+    if [[ ${#EXTENSIONS[@]} -ne 0 ]]; then
+        found_ext=0
+        for ext in "${EXTENSIONS[@]}"; do
+            if [[ "$EXT" == "$ext" ]]; then
+                found_ext=1
+                break
+            fi
+        done
+        if [[ "$found_ext" -eq 0 ]]; then
+            continue
+        fi
     fi
 
     # 既にリネームされたファイルをスキップ (prefixXX.拡張子 の形式)
