@@ -75,7 +75,7 @@ autorename <directory_to_watch> [-p prefix] [-t extension] [-c digits] [-s start
 
 | Option | Description |
 |--------|------------|
-| `-p, --prefix <name>` | Set the prefix for renamed files (default: `img`) |
+| `-p, --prefix <name>` | Set the prefix for renamed files (default: `*(Every file formats)`) |
 | `-t, --type <extension>` | Specify file extensions to monitor (can be used multiple times) |
 | `-c, --counter <digits>` | Set the number of digits for numbering (default: `2`) |
 | `-s, --start <number>` | Set the starting number for the counter (default: `1`) |
@@ -131,7 +131,7 @@ img003.png
 
 ## Notes:
 - If `-e` is not specified, the script **runs indefinitely** until manually stopped with `Ctrl + C`(`^C`).  
-- To monitor multiple file types, use `-t` multiple times (`-t png -t jpg`).  
+- To monitor multiple file types, use `-t` multiple times (`-t png -t jpg`). To monitor every file types, do not type the `-t` option.
 - If -e (end counter) is lower than -s (start counter), the -e counter will be ignored and the command will not be automatically terminated. To stop the command, enter `Ctrl + C`(`^C`) to force the command to exit.
 -----
 <a name="japanese"/>
@@ -198,7 +198,7 @@ autorename <directory_to_watch> [-p prefix] [-t extension] [-c digits] [-s start
 | オプション | 解説 |
 |--------|------------|
 | `-p, --prefix <name>` | ファイル名変更時に使うプリフィックスを設定します。オプションがない場合は、デフォルトとして「img」が使われます。 |
-| `-t, --type <extension>` | 名前を変更したいファイル拡張子を設定できます。ファイル拡張子は複数指定でき、指定されてない場合はpngを使用します。 |
+| `-t, --type <extension>` | 名前を変更したいファイル拡張子を設定できます。ファイル拡張子は複数指定でき、指定されてない場合は全てのファイルフォーマットを対象とします。 |
 | `-c, --counter <digits>` | ファイルの名前変更時に使うカウンターの桁数を設定できます。デフォルトとしては2桁の数字(01, 02, 03...99)を使用します。 |
 | `-s, --start <number>` | カウンターの開始番号を指定できます。デフォルトでは「1」からカウンターが開始されます。 |
 | `-e, --end <number>` | コマンドを終了させるカウンターを指定できます。 |
@@ -261,6 +261,6 @@ img003.png
 
 ## 注意事項:
 - -e(終了カウンター)が指定されていない場合は、コマンドは**終了することなくそのファイルを監視し続けます。**コマンドを停止するためには、`Ctrl + C`(`^C`)を入力して強制的にコマンドを終了させてください。
-- 複数のファイル拡張子を対象にしたい場合は、`-t`オプションを複数回入力してください。 (例: `-t png -t jpg`).
+- 複数のファイル拡張子を対象にしたい場合は、`-t`オプションを複数回入力してください。 (例: `-t png -t jpg`). 全てのファイルフォーマットを対象としたい場合は`-t`オプションを使用せずにそのまま実行してください。
 - -e(終了カウンター)が-s(開始カウンター)より低い場合、-eカウンターは無視され、コマンドは自動終了されません。コマンドを停止するためには、`Ctrl + C`(`^C`)を入力して強制的にコマンドを終了させてください。
 -----
